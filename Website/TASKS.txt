@@ -1,0 +1,33 @@
+- Make dates different for their respective months - DONE
+- Make dates correlate to their real life positions depending on the day of the week - DONE
+- Allow previously booked dates to show on the website
+- make website more presentable and neat
+- make multiple pages for various functions
+
+
+
+
+
+
+function calculate_day_position(){
+    let data = [[],[],[],[],[],[],[],[],[],[],[],[],[],[],[]]
+    for(i = 2020;i<2035;i++){
+      for(j=1;j<=12;j++){
+        if(j<10){
+          date = new Date(i + "-" + "0" + j + "-01")
+          console.log(date)
+
+          weekday = date.getDay()
+          }
+        else{
+          date = new Date(i + "-" + j + "-01")
+          console.log(date)
+          weekday = date.getDay()
+        }
+        data[i-2020][j-1]=weekday
+        
+        
+      }
+    }
+    console.log(data)
+  }
