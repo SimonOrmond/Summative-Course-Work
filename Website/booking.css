@@ -1,10 +1,6 @@
 ul {list-style-type: none;}
 body {font-family: Verdana, sans-serif;}
 
-/* Month header */
-
-
-/* Month list */
 .month ul {
   margin: 0;
   padding: 0;
@@ -17,13 +13,14 @@ body {font-family: Verdana, sans-serif;}
   letter-spacing: 3px;
 }
 
-/* Previous button inside month header */
-
 #days .days_buttons{
     border:none;
 }
 
-/* Weekdays (Mon-Sun) */
+#card-custom-bg {
+    background-color: lightblue;
+  }
+
 .weekdays {
   margin: 0;
   padding: 10px 0;
@@ -37,7 +34,6 @@ body {font-family: Verdana, sans-serif;}
   text-align: center;
 }
 
-/* Days (1-31) */
 #days {
   padding: 10px 0;
   background: #eee;
@@ -54,7 +50,6 @@ body {font-family: Verdana, sans-serif;}
   color: #777;
 }
 
-/* Highlight the "current" day */
 .days li .active {
   padding: 5px;
   background: #1abc9c;

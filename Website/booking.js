@@ -1,32 +1,33 @@
+let bookedDates = []
+
 document.addEventListener('DOMContentLoaded', function () {
+  const details_form = document.getElementById('Form')
   const current_date = new Date()
-  
   const month_next = document.getElementById('month_next');
   const month_prev = document.getElementById('month_prev');
   const month = document.getElementById('month');
   let months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-  let days_of_months = [31,28,31,30,31,30,31,31,30,31,30,31]
+  let days_of_months = [31,28,31,30,31,30,31,31,30,31,30,31];
   let current_month = months[current_date.getMonth()];
   month.textContent = current_month;
-  let month_index = months.indexOf(current_month)
+  let month_index = months.indexOf(current_month);
   
   const year_next = document.getElementById('year_next');
   const year_prev = document.getElementById('year_prev');
-  const year = document.getElementById('year')
-  year.textContent = current_date.getFullYear()
+  const year = document.getElementById('year');
+  year.textContent = current_date.getFullYear();
 
   const clear_dates = document.getElementById('clear_dates');
-  const confirm_dates = document.getElementById('confirm_dates');
-  const calendar = document.getElementById("calendar")
+  const calendar = document.getElementById("calendar");
 
-  let weekday_data = [[3, 6, 0, 3, 5, 1, 3,  6, 2, 4, 0, 2],[5, 1, 1, 4, 6, 2, 4, 0, 3, 5, 1, 3],[6, 2, 2, 5, 0, 3, 5, 1, 4, 6, 2, 4],[0, 3, 3, 6, 1, 4, 6, 2, 5, 0, 3, 5],[1, 4, 5, 1, 3, 6, 1, 4, 0, 2, 5, 0],[3, 6, 6, 2, 4, 0, 2, 5, 1, 3, 6, 1],[4, 0, 0, 3, 5, 1, 3, 6, 2, 4, 0, 2],[5, 1, 1, 4, 6, 2, 4, 0, 3, 5, 1, 3],[6, 2, 3, 6, 1, 4, 6, 2, 5, 0, 3, 5],[1, 4, 4, 0, 2, 5, 0, 3, 6, 1, 4, 6],[2, 5, 5, 1, 3, 6, 1, 4, 0, 2, 5, 0],[3, 6, 6, 2, 4, 0, 2, 5, 1, 3, 6, 1],[4, 0, 1, 4, 6, 2, 4, 0, 3, 5, 1, 3],[6, 2, 2, 5, 0, 3, 5, 1, 4, 6, 2, 4],[0, 3, 3, 6, 1, 4, 6, 2, 5, 0, 3, 5]]
+  let weekday_data = [[3, 6, 0, 3, 5, 1, 3, 6, 2, 4, 0, 2],[5, 1, 1, 4, 6, 2, 4, 0, 3, 5, 1, 3],[6, 2, 2, 5, 0, 3, 5, 1, 4, 6, 2, 4],[0, 3, 3, 6, 1, 4, 6, 2, 5, 0, 3, 5],[1, 4, 5, 1, 3, 6, 1, 4, 0, 2, 5, 0],[3, 6, 6, 2, 4, 0, 2, 5, 1, 3, 6, 1],[4, 0, 0, 3, 5, 1, 3, 6, 2, 4, 0, 2],[5, 1, 1, 4, 6, 2, 4, 0, 3, 5, 1, 3],[6, 2, 3, 6, 1, 4, 6, 2, 5, 0, 3, 5],[1, 4, 4, 0, 2, 5, 0, 3, 6, 1, 4, 6],[2, 5, 5, 1, 3, 6, 1, 4, 0, 2, 5, 0],[3, 6, 6, 2, 4, 0, 2, 5, 1, 3, 6, 1],[4, 0, 1, 4, 6, 2, 4, 0, 3, 5, 1, 3],[6, 2, 2, 5, 0, 3, 5, 1, 4, 6, 2, 4],[0, 3, 3, 6, 1, 4, 6, 2, 5, 0, 3, 5]]
+  loadBookings();
   
-  load_dates()
 
-  let day_pressed = false
-  let value1 = ''
-  let value2 = ''
-  dates_completed = false
+  let day_pressed = false;
+  let value1 = '';
+  let value2 = '';
+  dates_completed = false;
   
   calendar.addEventListener("click", function (event) {
       if (event.target.classList.contains("days_buttons")) {
@@ -39,7 +40,6 @@ document.addEventListener('DOMContentLoaded', function () {
             month1 = month_index + 1
             year1 = current_year
             day_pressed = true
-            console.log('accessed')
             btn.style.backgroundColor="#1abc9c"
         }else if(day_pressed==true && dates_completed==false){
             dates_completed = true
@@ -53,13 +53,22 @@ document.addEventListener('DOMContentLoaded', function () {
               if(Number(days[i].textContent) > value1 & Number(days[i].textContent < value2)){
                 days[i].style.backgroundColor = 'lightblue'
                 buttons[i].style.backgroundColor = 'lightblue'
-
-      }
-    }
-
+      };
+    };
         }};
   });
-  
+
+  async function loadBookings() {
+    const response = await fetch("/bookings");
+    const data = await response.json();
+
+    bookedDates = data.bookings.flatMap(
+      booking => booking.bookingData.booked_dates 
+    );
+    load_dates()
+    console.log(bookedDates)
+  };
+
   month_next.addEventListener('click', function () {
     nextmonth();
     load_dates();
@@ -80,32 +89,38 @@ document.addEventListener('DOMContentLoaded', function () {
     cleardates()
   });
 
-  confirm_dates.addEventListener('click', function(){
-    if(dates_completed == true){
-            console.log(value2);
-            console.log(value1);
-            const date1 = month1 + "/" + value1 + "/" + year1
-            const date2 = month2 + "/" + value2 + "/" + year2
-            console.log(date1)
-            console.log(date2)
-            const dates = generateDateRange(date1, date2);
-            
-            fetch('/data', {
-              method: 'POST',
-              headers: {
-              'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ dates })
-              })
-                .then(res => res.json())
-                .then(data => {
-                  console.log(data);
-                  alert('Booking successful!');
-                })
-                .catch(err => console.error(err));
-            get_dates();
-        }
-  })
+  details_form.addEventListener('submit', function(event) {
+    event.preventDefault();
+    if (dates_completed==false){
+      alert('Please select dates first');
+      return;
+    };
+    const date1 = month1 + "/" + value1 + "/" + year1
+    const date2 = month2 + "/" + value2 + "/" + year2
+    const dates = generateDateRange(date1, date2);
+    const bookingData = {
+        firstName: document.getElementById("firstName").value,
+        lastName: document.getElementById("lastName").value,
+        email: document.getElementById("email").value,
+        phone: document.getElementById("phone").value,
+        booked_dates: dates
+      };
+    console.log(bookingData)
+    fetch('/bookings', {
+      method: 'POST',
+      headers: {
+      'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ bookingData })
+      })
+        .then(res => res.json())
+        .then(data => {
+          console.log(data);
+          alert('Booking successful!');
+        })
+        .catch(err => console.error(err));
+    load_dates()
+  });
 
   function generateDateRange(start, end) {
     const dates = [];
@@ -116,7 +131,6 @@ document.addEventListener('DOMContentLoaded', function () {
       dates.push(current.toISOString().split('T')[0]);
       current.setDate(current.getDate() + 1);
     }
-
   return dates;
   } 
   
@@ -124,7 +138,6 @@ document.addEventListener('DOMContentLoaded', function () {
     document.querySelectorAll('.days_list').forEach(e => e.remove());
     current_year = Number(year.textContent)
     let weekday_offset = weekday_data[current_year-2020][month_index]
-    console.log(weekday_offset)
     for(i=0;i<weekday_offset;i++){
       const placeholder = document.createElement("li")
       const button = document.createElement("button");
@@ -140,17 +153,16 @@ document.addEventListener('DOMContentLoaded', function () {
     }
     
     for (i = 1; i <= days_of_months[month_index]; i++) {
-      const list_element = document.createElement("li")
+      const list_element = document.createElement("li");
       const btn = document.createElement("button");
-      list_element.className = "days_list"
+      list_element.className = "days_list";
       btn.className = "days_buttons";
       btn.value = i;
       btn.textContent = i;
       list_element.appendChild(btn)
       days.appendChild(list_element);
     }
-    let dates_to_fill = 7-((weekday_offset+days_of_months[month_index]) % 7)
-    console.log(dates_to_fill)
+    let dates_to_fill = 7-((weekday_offset+days_of_months[month_index]) % 7);
     if(dates_to_fill != 7){
       for(i=0;i<dates_to_fill;i++){
       const placeholder = document.createElement("li")
@@ -160,16 +172,28 @@ document.addEventListener('DOMContentLoaded', function () {
       placeholder.style.backgroundColor = '#c3d8d2ff'
       placeholder.style.height = '10px'
       placeholder.style.padding = '20px'
-      button.textContent ='  '
+      button.textContent = '  '
       placeholder.appendChild(button)
-
       days.appendChild(placeholder)
         }
     }
+    days2 = document.querySelectorAll('.days_buttons')
+    days2.forEach((day) => {
+      if(day.textContent !== '  '){
+        date = current_year + "-" + (month_index+1) + "-" + day.textContent
+        date = new Date(date).toISOString().split('T')[0];
+        if(bookedDates.includes(date)){
+          list_item = day.closest('.days_list');
+          list_item.style.backgroundColor = 'rgb(132, 180, 166)';
+          day.style.backgroundColor = 'rgb(132, 180, 166)';
+          day.style.color = 'white'
+          day.disabled = true;
+        }}
+    })
+    
   } 
 
   function nextmonth(){
-    console.log(month_index);
     if(month_index == 11){
         month.textContent = months[0];
         month_index = 0
@@ -209,10 +233,7 @@ document.addEventListener('DOMContentLoaded', function () {
     year.textContent = new_year
   }
   
-  function get_dates(){
-    
-    console.log("your stay starts of the",value1,"/",month1,"/",year1," and ends on the",value2,"/",month2,"/",year2)
-  }
+
 
   function cleardates(){
     const buttons = document.querySelectorAll(".days_buttons");
