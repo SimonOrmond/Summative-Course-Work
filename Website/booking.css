@@ -17,10 +17,6 @@ body {font-family: Verdana, sans-serif;}
     border:none;
 }
 
-#card-custom-bg {
-    background-color: lightblue;
-  }
-
 .weekdays {
   margin: 0;
   padding: 10px 0;
@@ -53,5 +49,5 @@ body {font-family: Verdana, sans-serif;}
 .days li .active {
   padding: 5px;
   background: #1abc9c;
-  color: white !important
+  color: white !important;
 }

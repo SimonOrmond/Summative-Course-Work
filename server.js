@@ -24,15 +24,47 @@ const writeBookings = (data) => {
 
 app.get('/bookings', (req, res) => {
   const data = JSON.parse(fs.readFileSync('bookings.json', "utf8"));
-  res.json(data);
+  res.json(data.bookings);
 });
+
+app.get('/reviews', (req, res) => {
+  const data = JSON.parse(fs.readFileSync('bookings.json', "utf8"));
+  res.json(data.reviews);
+});
+
+app.post('/reviews', (req, res) => {
+  const { rating, comment } = req.body;
+
+  if (!rating||rating<1||rating>5) {
+    return res.status(400).json({ message: 'Invalid rating' });
+  }
+
+  const data = readBookings();
+
+  const newReview = {
+    id: Date.now(),
+    rating: Number(rating),
+    comment: comment?.trim(),
+    date: new Date().toISOString().split('T')[0]
+  };
+
+  data.reviews.push(newReview);
+
+  writeBookings(data);
+
+  res.status(201).json({
+    message: 'Review saved',
+    booking: data
+  });
+});
+
 
 app.post('/bookings', (req, res) => {
   const booking = req.body;
 
   if (!booking.bookingData.firstName || !booking.bookingData.email || !booking.bookingData.booked_dates?.length) {
     return res.status(400).json({ error: "Invalid booking data" });
-  }
+  };
 
   const data = readBookings();
 
@@ -53,3 +85,5 @@ app.listen(PORT, () => {
   console.log(`Server running at http://localhost:${PORT}`);
 });
 
+//used chatGPT for below code when debugging why I got the error "app.address is not a function" when testing
+module.exports = app;
