@@ -12,18 +12,18 @@ document.addEventListener('DOMContentLoaded', function () {
             return
         }
         const reviewData = await response.json();
-
-        reviewData.forEach(r => {
+        reviewContainer.innerHTML=''
+        reviewData.forEach(review => {
             const reviewDiv = document.createElement('div');
 
             const stars = document.createElement('strong');
-            stars.textContent = '⭐'.repeat(r.rating);
+            stars.textContent = '⭐'.repeat(review.rating);
 
             const comment = document.createElement('p');
-            comment.textContent = r.comment;
+            comment.textContent = review.comment;
 
             const date = document.createElement('small');
-            date.textContent = r.date;
+            date.textContent = review.date;
 
             reviewDiv.append(stars, comment, date);
             reviewContainer.appendChild(reviewDiv);

@@ -1,8 +1,29 @@
 {
-  "bookings": [
-    
-  ],
+  "bookings": [],
   "reviews": [
-    
+    {
+      "id": 1769613307045,
+      "rating": 2,
+      "comment": "hated it",
+      "date": "2026-01-28"
+    },
+    {
+      "id": 1769613318798,
+      "rating": 5,
+      "comment": "loved it",
+      "date": "2026-01-28"
+    },
+    {
+      "id": 1769613331269,
+      "rating": 5,
+      "comment": "hated it",
+      "date": "2026-01-28"
+    },
+    {
+      "id": 1769613675958,
+      "rating": 4,
+      "comment": "wasnt the best",
+      "date": "2026-01-28"
+    }
   ]
 }
